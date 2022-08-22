@@ -1,34 +1,21 @@
 package com.example.kotlinapp
-import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import java.math.BigDecimal
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Toast.makeText(this, "Tia Taloma Boboca", Toast.LENGTH_SHORT).show()
-        setContentView(R.layout.activity_main)
         val recyclerView = findViewById<RecyclerView>(R.id.rv_lista_items)
-        recyclerView.adapter = ListaProdutosAdapter(this, listOf(
-
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99")),
-            Produto("teste", "teste", BigDecimal("19.99"))
-
-        ))
+        recyclerView.adapter = ListaProdutosAdapter(this, listOf())
+        val fabAddItem = findViewById<FloatingActionButton>(R.id.btn_fab_add_item)
+        fabAddItem.setOnClickListener{
+            val intent = Intent(this, FormularioProdutoActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
