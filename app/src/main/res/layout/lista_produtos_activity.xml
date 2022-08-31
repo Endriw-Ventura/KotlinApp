@@ -8,7 +8,7 @@
     android:backgroundTint="@color/white">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_lista_items"
+        android:id="@+id/lista_produtos_activity_lista_de_items"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -19,7 +19,7 @@
         tools:listitem="@layout/produto_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_fab_add_item"
+        android:id="@+id/lista_produtos_activity_fab_add_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

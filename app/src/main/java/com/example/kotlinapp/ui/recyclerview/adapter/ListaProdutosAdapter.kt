@@ -1,0 +1,60 @@
+package com.example.kotlinapp.ui.recyclerview.adapter
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.example.kotlinapp.databinding.ProdutoItemBinding
+import com.example.kotlinapp.model.Produto
+import java.text.NumberFormat
+import java.util.*
+
+class ListaProdutosAdapter(
+    private val context: Context,
+    produtos: List<Produto>
+) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
+
+    private val produtos = produtos.toMutableList()
+
+    class ViewHolder(private val binding: ProdutoItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun vincula(produto: Produto) {
+            val nome = binding.produtoItemNome
+            nome.text = produto.nome
+            val descricao = binding.produtoItemDescricao
+            descricao.text = produto.descricao
+            val valor = binding.produtoItemPreco
+            valor.text =  formatadorEmReais(produto)
+            binding.produtoItemImageView.load(produto.image)
+
+        }
+
+        private fun formatadorEmReais(produto: Produto): String? {
+            val currencyInstance = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
+            val format = currencyInstance.format(produto.valor)
+            return format
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(context)
+        val binding = ProdutoItemBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val produto = produtos[position]
+        holder.vincula(produto)
+    }
+
+    override fun getItemCount(): Int = produtos.size
+
+    fun atualiza(produtos: List<Produto>) {
+        this.produtos.clear()
+        this.produtos.addAll(produtos)
+        notifyDataSetChanged()
+    }
+
+}
