@@ -1,14 +1,12 @@
 package com.example.kotlinapp.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import coil.load
-import com.example.kotlinapp.R
 import com.example.kotlinapp.dao.ProdutosDAO
 import com.example.kotlinapp.databinding.ActivityFormularioProdutoBinding
-import com.example.kotlinapp.databinding.FormularioImagemBinding
+import com.example.kotlinapp.extensions.carregaImagem
 import com.example.kotlinapp.model.Produto
+import com.example.kotlinapp.ui.dialog.FormularioImageDialog
 import java.math.BigDecimal
 
 class FormularioProdutoActivity : AppCompatActivity() {
@@ -23,22 +21,10 @@ class FormularioProdutoActivity : AppCompatActivity() {
         setContentView(binding.root)
         configuraBotaoSalvar()
         binding.activityFormularioProdutoImageView.setOnClickListener{
-            val bindingFormularioimage = FormularioImagemBinding.inflate(layoutInflater)
-            bindingFormularioimage.formularioImagemBtnAddImage.setOnClickListener{
-                url = bindingFormularioimage.formularioImagemUrl.text.toString()
-                bindingFormularioimage.formularioImagemImageView.load(url)
+            FormularioImageDialog(this).mostra{ imagem ->
+                url = imagem
+                binding.activityFormularioProdutoImageView.carregaImagem(url)
             }
-
-
-            AlertDialog.Builder(this)
-                .setView(bindingFormularioimage.root)
-                .setPositiveButton("Confirmar") { _, _ ->
-                    url = bindingFormularioimage.formularioImagemUrl.text.toString()
-                    binding.activityFormularioProdutoImageView.load(url)
-
-                }
-                .setNegativeButton("Cancelar") { _, _ -> }
-                .show()
         }
     }
 
@@ -61,6 +47,6 @@ class FormularioProdutoActivity : AppCompatActivity() {
         val descricao = campoDescricao.text.toString()
         val valor = campoValor.text.toString()
         val valorFormatado = if (valor.isBlank()) BigDecimal.ZERO else BigDecimal(valor)
-        return Produto(nome, descricao, valorFormatado, url)
+        return Produto(nome = nome, descricao = descricao, valor = valorFormatado, image = url)
     }
 }

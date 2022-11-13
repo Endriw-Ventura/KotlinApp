@@ -42,6 +42,6 @@ class ListaProdutosActivity : AppCompatActivity() {
     private fun configuraRecyclerView() {
         val recyclerView = binding.listaProdutosActivityListaDeItems
         recyclerView.adapter = adapter
+        recyclerView.setOnClickListener{}
     }
-
 }

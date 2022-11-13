@@ -14,7 +14,9 @@
         android:theme="@style/Theme.KotlinApp"
         tools:targetApi="31">
         <activity android:name=".ui.activity.FormularioProdutoActivity"/>
-    <activity
+        <activity android:name=".ui.activity.ProdutoDetalhesActivity"
+            android:theme="@style/noappbarstyle"/>
+        <activity
             android:name=".ui.activity.ListaProdutosActivity"
             android:exported="true">
             <intent-filter>
@@ -22,6 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

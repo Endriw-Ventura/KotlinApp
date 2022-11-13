@@ -1,14 +1,19 @@
 package com.example.kotlinapp.ui.recyclerview.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.example.kotlinapp.databinding.ProdutoItemBinding
+import com.example.kotlinapp.extensions.carregaImagem
+import com.example.kotlinapp.extensions.formataParaMoedaBrasileira
 import com.example.kotlinapp.model.Produto
+import com.example.kotlinapp.ui.activity.ProdutoDetalhesActivity
 import java.text.NumberFormat
 import java.util.*
+
 
 class ListaProdutosAdapter(
     private val context: Context,
@@ -19,22 +24,19 @@ class ListaProdutosAdapter(
 
     class ViewHolder(private val binding: ProdutoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun vincula(produto: Produto) {
             val nome = binding.produtoItemNome
             nome.text = produto.nome
             val descricao = binding.produtoItemDescricao
             descricao.text = produto.descricao
             val valor = binding.produtoItemPreco
-            valor.text =  formatadorEmReais(produto)
-            binding.produtoItemImageView.load(produto.image)
-
-        }
-
-        private fun formatadorEmReais(produto: Produto): String? {
-            val currencyInstance = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
-            val format = currencyInstance.format(produto.valor)
-            return format
+            valor.text = produto.valor.formataParaMoedaBrasileira()
+            if (produto.image != null) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+            binding.produtoItemImageView.carregaImagem(produto.image)
         }
     }
 
@@ -47,6 +49,10 @@ class ListaProdutosAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val produto = produtos[position]
         holder.vincula(produto)
+        holder.itemView.setOnClickListener {
+            val intent = ProdutoDetalhesActivity.newIntent(this.context, produto)
+            this.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int = produtos.size
