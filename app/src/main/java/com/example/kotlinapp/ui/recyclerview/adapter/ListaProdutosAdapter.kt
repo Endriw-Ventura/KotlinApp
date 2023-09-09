@@ -2,22 +2,24 @@ package com.example.kotlinapp.ui.recyclerview.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.PopupMenu
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kotlinapp.R
+import com.example.kotlinapp.database.ProdutoDatabase
 import com.example.kotlinapp.databinding.ProdutoItemBinding
 import com.example.kotlinapp.extensions.carregaImagem
 import com.example.kotlinapp.extensions.formataParaMoedaBrasileira
 import com.example.kotlinapp.model.Produto
+import com.example.kotlinapp.ui.activity.FormularioProdutoActivity
 import com.example.kotlinapp.ui.activity.ProdutoDetalhesActivity
-import java.text.NumberFormat
-import java.util.*
+
 
 
 class ListaProdutosAdapter(
     private val context: Context,
-    produtos: List<Produto>
+    produtos: List<Produto> = emptyList()
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
@@ -49,9 +51,32 @@ class ListaProdutosAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val produto = produtos[position]
         holder.vincula(produto)
+
         holder.itemView.setOnClickListener {
-            val intent = ProdutoDetalhesActivity.newIntent(this.context, produto)
+            val intent = ProdutoDetalhesActivity.newIntent(this.context, produto.uid)
             this.context.startActivity(intent)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            PopupMenu(context, holder.itemView).apply {
+                inflate(R.menu.menu_editar_produto)
+                setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.id_menu_editar_produto -> {
+                            val intent = FormularioProdutoActivity.newIntent(context, produto.uid)
+                            context.startActivity(intent)
+                            true
+                        }
+                        R.id.id_menu_excluir_produto -> {
+                            deletaProduto(produto)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                show()
+            }
+            true
         }
     }
 
@@ -63,4 +88,12 @@ class ListaProdutosAdapter(
         notifyDataSetChanged()
     }
 
+    fun deletaProduto(produto: Produto){
+        val produtoDao = ProdutoDatabase.getDatabaseInstance(context).produtoDao()
+        produtoDao.deleta(produto)
+        atualiza(produtoDao.buscaTodos())
+    }
 }
+
+
+

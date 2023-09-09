@@ -3,14 +3,13 @@ package com.example.kotlinapp.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.kotlinapp.dao.ProdutosDAO
+import com.example.kotlinapp.database.ProdutoDatabase
 import com.example.kotlinapp.databinding.ListaProdutosActivityBinding
 import com.example.kotlinapp.ui.recyclerview.adapter.ListaProdutosAdapter
 
 class ListaProdutosActivity : AppCompatActivity() {
 
-    private val dao = ProdutosDAO()
-    private val adapter = ListaProdutosAdapter(context = this, produtos = dao.buscaTodos())
+    private val adapter = ListaProdutosAdapter(context = this)
     private val binding by lazy {
         ListaProdutosActivityBinding.inflate(layoutInflater)
     }
@@ -23,8 +22,10 @@ class ListaProdutosActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        val db = ProdutoDatabase.getDatabaseInstance(this)
+        val produtoDAO = db.produtoDao()
+        adapter.atualiza(produtoDAO.buscaTodos())
         super.onResume()
-        adapter.atualiza(dao.buscaTodos())
     }
 
     private fun configuraFab() {
@@ -42,6 +43,5 @@ class ListaProdutosActivity : AppCompatActivity() {
     private fun configuraRecyclerView() {
         val recyclerView = binding.listaProdutosActivityListaDeItems
         recyclerView.adapter = adapter
-        recyclerView.setOnClickListener{}
     }
 }

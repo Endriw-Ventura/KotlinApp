@@ -9,12 +9,15 @@ interface ProdutoDao {
     @Query("SELECT * FROM Produto")
     fun buscaTodos() : List<Produto>
 
-    //@Query("SELECT * FROM Produto WHERE uid = :uid")
-    //fun buscaPeloUid(uid: Int) : Produto
+    @Query("SELECT * FROM Produto WHERE uid = :uid")
+    fun buscaPeloUid(uid: Long) : Produto?
 
     @Insert
     fun adiciona(produto: Produto)
 
-    //@Delete
-    //fun deleta(produto: Produto)
+    @Delete
+    fun deleta(produto: Produto)
+
+    @Update
+    fun update(produto: Produto)
 }

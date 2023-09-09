@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">KotlinApp</string>
+    <string name="app_name">App Kotlin</string>
     <string name="hello_world">Olá Mundo!</string>
 </resources>
